@@ -1,0 +1,10 @@
+<html>
+    <body>
+        <h1> IT 122 Home Page</h1>
+        <h2>Welcome Students!</h2>
+        
+        <% students.forEach(function(Students) { %>
+        <li> <a href="/students/<%= student.id %>"> <%= student.name %></a></li>
+        <% }); %>
+    </body>
+</html>

@@ -17,4 +17,14 @@ app.get('/students/:name', (req, res) => {
     console.log(req.params.name)
     res.send(`Welcome ${req.params.name}`);
 });
+app.get('/about', (req,res) => {
+    res.sendFile('/public/about.html');
+});
 
+app.use((req,res) =>{
+    res.status(404);
+    res.send('404 - Not found');
+});
+app.listen(app.get('port'), () =>{
+    console.log('Express started');
+});

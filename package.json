@@ -1,7 +1,7 @@
 {
   "name": "it122",
   "version": "1.0.0",
-  "description": "",
+  "description": "project for it122",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/alamerewetsegenet/it122.git"
   },
-  "author": "Etsegenet",
+  "author": "etsegenet alamerew",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/alamerewetsegenet/it122/issues"
