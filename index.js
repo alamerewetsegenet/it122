@@ -1,19 +1,18 @@
-const http = require("http"); 
-http.createServer((req,res) => {
-     console.log(req.url)
-     var path = req.url.toLowerCase();    
-    switch(path) {
-        case '/':
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end('Home page');
-            break;
-        case '/about':
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end('About page');
-            break;
-        default:
-            res.writeHead(404, {'Content-Type': 'text/plain'});
-            res.end('Not found');
-            break;
-    }    
-}).listen(process.env.PORT || 3000);
+const express = require('express');
+const app = express();
+const dataModule = require('./data');
+
+app.set('view engine', 'ejs');
+
+app.get('/', (req, res) => {
+    const data = dataModule.getAll();
+    res.render('home', {data});
+});
+
+app.get('/detail', (req, res) => {
+    const name = req.query.name;
+    const item = dataModule.getItem(name);
+    res.render('detail', {item});
+});
+
+app.listen(3000, () => console.log('Listening on port 3000'));
