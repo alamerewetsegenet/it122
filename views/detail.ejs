@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
+    <link href="public/style.css" type="text/css" rel="stylesheet">
     <body>
         <title>Detail</title>
- <% if (item) { %>  
-    <h2><%= item.make %></h2>
-    <li> <%= item.model %></li>
-    <li> <%= item.year %></li>
-    <li> <%= item.color %></li>
-    <li> <%= item.price %></li>
-<a href="/">Back to home</a>
- <% } else { %> 
-        <h2><%= item %> not found</h2>
-<% } %> 
+        <% if (item) { %>  
+            <h2><%= item.make %></h2>
+            <li> <%= item.model %></li>
+            <li> <%= item.year %></li>
+            <li> <%= item.color %></li>
+            <li> <%= item.price %></li>
+        <a href="/">Back to home</a>
+        <% } else { %> 
+                <h2><%= item %> not found</h2>
+        <% } %> 
 
     </body>
 </html>
