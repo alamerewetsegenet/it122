@@ -1,17 +1,47 @@
-const data = [
-    {name: 'Item1', attribute1: 'attribute1.1', attribute2: 'attribute1.2', attribute3: 'attribute1.3', attribute4: 'attribute1.4'},
-    {name: 'Item2', attribute1: 'attribute2.1', attribute2: 'attribute2.2', attribute3: 'attribute2.3', attribute4: 'attribute2.4'},
-    {name: 'Item3', attribute1: 'attribute3.1', attribute2: 'attribute3.2', attribute3: 'attribute3.3', attribute4: 'attribute3.4'},
-    {name: 'Item4', attribute1: 'attribute4.1', attribute2: 'attribute4.2', attribute3: 'attribute4.3', attribute4: 'attribute4.4'},
-    {name: 'Item5', attribute1: 'attribute5.1', attribute2: 'attribute5.2', attribute3: 'attribute5.3', attribute4: 'attribute5.4'},
+const cars= [
+    {
+        make: 'Buick', 
+        model: 'Encore GX', 
+        year: '2023', 
+        color: 'blue',
+        price: '$29,290', 
+    },
+    {
+        make: 'Tesla', 
+        model: 'S P90D', 
+        year: '2015',
+        color: 'white',
+        price: '$37,000',
+    },
+    {
+        make: 'Jeep', 
+        model: 'Wrangler', 
+        year: '2023',
+        color: 'blue',
+        price: '$86,530', 
+    },
+    {
+        make: 'lexus',
+        model: 'lexus RX', 
+        year: '2022',
+        color: 'blue', 
+        price: '$47,000', 
+    },
+    {
+        make: 'BMW', 
+        model: 'BMW X1', 
+        year: '2023',
+        color: 'blue', 
+        price: '$39,000', 
+    },
 ];
 
 function getAll() {
-    return data;
+    return cars;
 }
 
 function getItem(key) {
-    return data.find(item => item.name === key);
+    return cars.find(item => item.model === key);
 }
 
 module.exports = {

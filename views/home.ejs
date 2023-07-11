@@ -2,12 +2,13 @@
 <html>
 <head>
     <title>Home</title>
+    <h1>Cars Models</h1>
 </head>
 <body>
     <ul>
         <% data.forEach(item => { %>
             <li>
-                <a href="/detail?name=<%= item.name %>"><%= item.name %></a>
+                <a href="/detail?model=<%= item.model %>"><%= item.model %></a>
             </li>
         <% }); %>
     </ul>

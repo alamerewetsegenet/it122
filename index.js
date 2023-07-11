@@ -6,7 +6,7 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
     const data = dataModule.getAll();
-    res.render('home', {data});
+    res.render('home', {cars});
 });
 
 app.get('/detail', (req, res) => {
