@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <link href="public/style.css" type="text/css" rel="stylesheet">
     <body>
+        <a href="/">Home</a>
+        {{#if result}}
         <title>Detail</title>
         <% if (item) { %>  
             <h2><%= item.make %></h2>
@@ -10,6 +11,11 @@
             <li> <%= item.color %></li>
             <li> <%= item.price %></li>
         <a href="/">Back to home</a>
+        <a href="/delete?make={{result.make}}">Delete</a> 
+
+         <h2>{{item}} not found
+            {{/if}}
+            
         <% } else { %> 
                 <h2><%= item %> not found</h2>
         <% } %> 

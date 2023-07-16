@@ -1,4 +1,16 @@
-<!DOCTYPE html>
+
+<h2>Home</h2>
+<form method="POST" action="/detail">
+    <input type="text" name="item" placeholder="item" required maxlength="100">
+    <button>Search</button>
+</form>
+<hr>
+<h3>Cars</h3>
+{{#each cars}}
+    <li><a href="/detail?model={{item}}">{{item}}</a></li>
+{{/each}}
+
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Home</title>
@@ -13,4 +25,4 @@
         <% }); %>
     </ul>
 </body>
-</html>
+</html> -->
