@@ -1,19 +1,24 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const dataModule = require('./data');
+import {getAll, getItem} from './data.js';
 
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-    const data = dataModule.getAll();
+    const data = getAll();
     res.render('home', {data});
 });
 
 app.get('/detail', (req, res) => {
     const model = req.query.model;
-    const item = dataModule.getItem(model);
+    const item = getItem(model);
     res.render('detail', {item});
     //console.log(model)
+});
+app.get('/delete', (req, res) => {
+    const model = req.query.model;
+    const item = getItem(model);
+    res.render('delete', {item});
 });
 
 app.listen(3000, () => console.log('Listening on port 3000'));
