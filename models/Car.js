@@ -25,3 +25,4 @@ const carsSchema = new Schema({
 });
 
 export const Car = mongoose.model('Car', carsSchema);
+export {getAll, getItem}

@@ -44,7 +44,4 @@ function getItem(key) {
     return cars.find(item => item.model === key);
 }
 
-module.exports = {
-    getAll,
-    getItem
-}
+export {getAll, getItem }
