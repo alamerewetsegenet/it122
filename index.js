@@ -25,48 +25,34 @@ app.get('/detail', (req, res) => {
 
 //API
 
-app.get('/api/cars', (req, res, next) => {
-    Car.find({}, (err, items) => {
-     if (err) return next(err);
-     res.json(items);
-    });
-    });
-  
-  //get 1 car data
-  app.get('/api/car/:make', (req, res, next) => {
-    Car.findOne({'make': req.params.make}, (err, item) => {
-      if (err) return next(err);
-      if (item){
-      res.json(item);
-      }
-      else {
-        return res.status(500).send('Sorry this car does not exist');
-      }
-    }); 
-  });
-  
-  // delete 1 car
-  app.get('/api/delete/:make', (req, res, next) => { 
-      Car.findOne({'make': req.params.make}, (err, result) => {
+app.get('/api/cars', (req,res) => {
+    Car.find({}).lean()
+      .then((cars) => {
+        res.json(cars);})
+      .catch(err =>  {
+        res.status(500).send('Database Error occurred');
+      })
+});
+
+app.get('/api/cars/:make', (req,res) => {
+    Car.findOne({ make:req.params.make }).lean()
+        .then((cars) => {
+           res.json(cars);
+        })
+        .catch(err => {
+            res.status(500).send('Database Error occurred');
+        });
+});
+
+app.get('/api/v1/delete/:id', (req,res, next) => {
+    Car.deleteOne({"_id":req.params.id }, (err, result) => {
         if (err) return next(err);
-        if (result){
-       Car.deleteOne({'make': req.params.make}, (err, item) => {
-        if (err) return next(err);
-        res.json(["successed, You have just deleted:  ", result]);  
-       });}
-      else{
-        return res.status(500).send('Sorry this car does not exist');
-      }
-    });  
-   });
-  
-    //add post route from the apiform
- app.post('/api/add/', (req, res, next) => {
-    var newItem = {'make': req.body.make, 'model':req.body.model, 'year': req.body.year, 'color': req.body.color, 'price': req.body.price };
-    Car.findOneAndUpdate({'make': req.body.make}, newItem, {upsert: true, new:true, useFindAndModify: false}, (err, result) => {
-        res.json(["successed, You have just Added/Updated:  ", result]);
+        // return # of items deleted
+        res.json({"deleted": result});
     });
-  });
+});
+
+
 
 
 
