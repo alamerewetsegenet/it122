@@ -47,7 +47,7 @@ app.get('/api/cars', (req, res, next) => {
   
   // delete 1 car
   app.get('/api/delete/:make', (req, res, next) => { 
-      Countries.findOne({'make': req.params.make}, (err, result) => {
+      Car.findOne({'make': req.params.make}, (err, result) => {
         if (err) return next(err);
         if (result){
        Car.deleteOne({'make': req.params.make}, (err, item) => {
@@ -67,68 +67,7 @@ app.get('/api/cars', (req, res, next) => {
         res.json(["successed, You have just Added/Updated:  ", result]);
     });
   });
-//get all cars 
-// app.get('/api/cars', (req,res) => {
-//     Car.find({}).lean()
-//       .then((cars) => {
-//         res.json(cars);})
-//       .catch(err =>  {
-//         res.status(500).send('Database Error occurred');
-//       })
-// });
 
-// //get one car
-// app.get('/api/cars/:make', (req,res) => {
-//     Car.find({ make:req.params.make }).lean()
-//         .then((cars) => {
-//            res.json(cars);
-//         })
-//         .catch(err => {
-//             res.status(500).send('Sorry this car does not exist');
-//         });
-// });
-
-// //delete one car
-// app.get('/api/delete/:make', (req,res, next) => {
-//     Car.deleteOne({"item":req.params.make}, (err, result) => {
-//         if (err) return next(err);
-//         // return # of items deleted
-//         res.json("successed, you have deleted:", result);
-//     });
-// });
-
-// app.get('/api/delete/:name', (req, res, next) => { 
-//     Countries.findOne({'name': req.params.name}, (err, result) => {
-//       if (err) return next(err);
-//       if (result){
-//      Countries.deleteOne({'name': req.params.name}, (err, item) => {
-//       if (err) return next(err);
-//       res.json(["successed, You have just deleted:  ", result]);  
-//      });}
-//     else{
-//       return res.status(500).send('Sorry this country does not exist');
-//     }
-//   });  
-//  });
-app.post('/api/add/', (req,res, next) => {
-    // find & update existing item, or add new 
-    if (!req.body._id) { // insert new document
-        let car = new Car(req.body);
-        car.save((err,newCar) => {
-            if (err) return next(err);
-            res.json({updated: 0, _id: newCar._id});
-        });
-    } else { // update existing document
-        Car.updateOne({ _id: req.body._id}, {make:req.body.make, model: req.body.model, pubdate: req.body.pubdate }, (err, result) => {
-            if (err) return next(err);
-            res.json({updated: result.nModified, _id: req.body._id});
-        });
-    }
-});
-
-// fetch("/api/v1/cars")
-//     .then((response) => response.json())
-//     .then(results => console.log(results));
 
 
 app.listen(3000, () => console.log('Listening on port 3000'));
