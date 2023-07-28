@@ -2,7 +2,6 @@
 <html>
     <body>
         <a href="/">Home</a>
-        <!-- {{#if result}} -->
         <title>Detail</title>
         <% if (item) { %>  
             <h2><%= item.make %></h2>
@@ -13,12 +12,10 @@
         <a href="/">Back to home</a>
         <a href="/delete?make={{result.make}}">Delete</a> 
 
-         <!-- <h2>{{item}} not found
-            {{/if}} -->
+        
             
         <% } else { %> 
                 <h2><%= item %> not found</h2>
         <% } %> 
-
     </body>
 </html>
