@@ -10,3 +10,20 @@
 
     </body>
 </html>
+<html>
+    <body>
+        <a href="/">Home</a>
+        <%= if(result.deleted) {%>
+        <h2>"make deleted"</h2>
+        <%= remaining.total %>
+
+        }
+{{#if result.deleted}}
+    <h2>{{make}} deleted</h2>
+    remaining total: {{result.total}}
+{{else}}
+    <h2>{{make}} not found</h2>
+{{/if}}
+
+    </body>
+</html>
