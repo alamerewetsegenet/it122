@@ -25,10 +25,7 @@ app.get('/detail', (req, res) => {
 
 //API
 
-<<<<<<< HEAD
 //get all
-=======
->>>>>>> 2e5367bcfb1e1eec3dc3f9be3b424c70b0d85f07
 app.get('/api/cars', (req,res) => {
     Car.find({}).lean()
       .then((cars) => {
@@ -36,11 +33,10 @@ app.get('/api/cars', (req,res) => {
       .catch(err =>  {
         res.status(500).send('Database Error occurred');
       })
-<<<<<<< HEAD
 });
 
 //get one 
-app.get('/api/car/:make', (req,res) => {
+app.get('/api/cars/:make', (req,res) => {
     Car.findOne({ make:req.params.make }).lean()
         .then((cars) => {
            res.json(cars);
@@ -50,9 +46,9 @@ app.get('/api/car/:make', (req,res) => {
         });
 });
 
-// delete one 
+// delete 
 app.get('/api/delete/:make', (req,res, next) => {
-    Car.deleteOne({"make":req.params.make }, (err, result) => {
+    Car.deleteOne({"_make":req.params.make }, (err, result) => {
         if (err) return next(err);
         res.json({"deleted": result});
     });
@@ -72,30 +68,6 @@ app.post('/api/add/', (req,res, next) => {
         });
     }
 });
-
-
-=======
-});
-
-app.get('/api/cars/:make', (req,res) => {
-    Car.findOne({ make:req.params.make }).lean()
-        .then((cars) => {
-           res.json(cars);
-        })
-        .catch(err => {
-            res.status(500).send('Database Error occurred');
-        });
-});
-
-app.get('/api/v1/delete/:id', (req,res, next) => {
-    Car.deleteOne({"_id":req.params.id }, (err, result) => {
-        if (err) return next(err);
-        // return # of items deleted
-        res.json({"deleted": result});
-    });
-});
->>>>>>> 2e5367bcfb1e1eec3dc3f9be3b424c70b0d85f07
-
 
 
 
