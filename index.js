@@ -23,6 +23,22 @@ app.get('/detail', (req, res) => {
     res.render('detail', {item});
 });
 
+// app.get('/', (req,res) => {
+//     Car.find({}).lean()
+//         .then((cars) => {
+//             res.render('home', { cars });
+//         })
+//         .catch(err => next(err));
+// });
+
+// app.get('/detail', (req,res,next) => {
+//     Car.findOne({ make:req.query.make }).lean()
+//         .then((car) => {
+//             res.render('details', {result: car} );
+//         })
+//         .catch(err => next(err));
+// });
+
 //API
 
 //get all
@@ -48,13 +64,15 @@ app.get('/api/cars/:make', (req,res) => {
 
 // delete 
 app.get('/api/delete/:make', (req,res, next) => {
-    Car.deleteOne({"_make":req.params.make }, (err, result) => {
-        if (err) return next(err);
-        res.json({"deleted": result});
+    Car.deleteOne({make:req.params.make }).lean()
+    .then((result) => {
+        res.json(result);
     });
 });
+
+
 // add
-app.post('/api/add/', (req,res, next) => {
+app.post('/api/add/:make', (req,res, next) => {
     if (!req.body.make) { 
         let car = new Car(req.body);
         car.save((err,newCar) => {

@@ -1,4 +1,100 @@
-<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>React App Demo</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<!-- Don't use this in production: -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<h2></h2>
+<div id="root"></div>
+<script type="text/babel">
+
+// return a list of cars
+const CarList = (props) => {
+    
+  // props.data is an array
+  const listItems = props.data.map((item) => (
+    <li key={item.make} id={item.make} onClick={props.clickHandler}>
+      {item.make}
+    </li>
+  ));
+  return <ul>{listItems}</ul>;
+};
+
+const ItemDetail = (props) => {
+  return (
+    <div>
+      <hr />
+      <h3>Car Details</h3>
+      <form>
+        Make: <input type="text" name="make" value={props.item.make || ""} onChange={props.handleChange} /><br />
+        Model: <input type="text" name="model" value={props.item.model || ""} onChange={props.handleChange} /><br />
+        Year: <input type="text" name="year" value={props.item.year || ""} onChange={props.handleChange} /><br />
+        Color: <input type="text" name="color" value={props.item.color || ""} onChange={props.handleChange} /><br />
+        Price: <input type="text" name="price" value={props.item.price || ""} onChange={props.handleChange} /><br />
+      </form>
+      
+      <button name="submit" onClick={props.selectItem}>Submit</button>&nbsp;
+
+      <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
+    </div>
+  );
+};
+
+const CarApp = () => {
+  const [items, setItems] = React.useState([]);
+
+  const [currentItem, setCurrentItem] = React.useState({});
+
+  // list click event handler
+  const selectItem = (event) => {
+    const found = items.filter((item) => item.make === event.target.innerText);
+    setCurrentItem(found[0]);
+  };
+  const submitForm =() => {
+    setCurrentItem({});
+  };
+
+  const clearForm = () => {
+    setCurrentItem({});
+  };
+
+  // update list state
+  const handleChange = (event) => {
+    let newItem = { ...currentItem };
+    newItem[event.target.name] = event.target.value;
+    // update currentItem state
+    setCurrentItem(newItem);
+    // update list state
+    const updatedItems = items.map((item) => {
+      if (item.make === newItem.make) {
+        return newItem;
+      }
+      return item;
+    });
+    setItems(updatedItems);
+  };
+
+  return (
+    <div>
+      <h2>Cars Inventory</h2>
+      <CarList data={items} clickHandler={selectItem} />
+      <ItemDetail item={currentItem} handleChange={handleChange} clearForm={clearForm} />
+    </div>
+  );
+};
+
+const container = document.getElementById('root');
+ReactDOM.render(<CarApp />, container);
+
+</script>
+</body>
+</html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Home</title>
@@ -14,14 +110,4 @@
     </ul>
 </body>
 </html>
-
-<!-- {{!-- <h2>Home</h2>
-<form method="POST" action="/detail">
-    <input type="text" name="make" placeholder="make" required maxlength="100">
-    <button>Search</button>
-</form>
-<hr>
-<h3>Cars</h3>
-{{#each cars}}
-    <li><a href="/detail?model={{model}}">{{model}}</a></li>
-{{/each}} --}} -->
+ -->
