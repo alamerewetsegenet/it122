@@ -15,9 +15,10 @@
 
 // return a list of cars
 const CarList = (props) => {
+    console.log(props)
     
   // props.data is an array
-  const listItems = props.data.map((item) => (
+  const listItems = props.cars.map((item) => (
     <li key={item.make} id={item.make} onClick={props.clickHandler}>
       {item.make}
     </li>
@@ -82,7 +83,7 @@ const CarApp = () => {
   return (
     <div>
       <h2>Cars Inventory</h2>
-      <CarList data={items} clickHandler={selectItem} />
+      <CarList cars={items} clickHandler={selectItem} />
       <ItemDetail item={currentItem} handleChange={handleChange} clearForm={clearForm} />
     </div>
   );
@@ -90,6 +91,8 @@ const CarApp = () => {
 
 const container = document.getElementById('root');
 ReactDOM.render(<CarApp />, container);
+
+
 
 </script>
 </body>
