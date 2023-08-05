@@ -19,7 +19,7 @@ const CarList = (props) => {
     
   // props.data is an array
   const listItems = props.cars.map((item) => (
-    <li key={item.make} id={item.make} onClick={props.clickHandler}>
+    <li key={item._id} id={item.make} onClick={props.clickHandler}>
       {item.make}
     </li>
   ));
@@ -91,26 +91,8 @@ const CarApp = () => {
 
 const container = document.getElementById('root');
 ReactDOM.render(<CarApp />, container);
-
-
-
 </script>
 </body>
 </html>
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Home</title>
-    <h1>Cars Models</h1>
-</head>
-<body>
-    <ul>
-        <% data.forEach(item => { %>
-            <li>
-                <a href="/detail?model=<%= item.model %>"><%= item.model %></a>
-            </li>
-        <% }); %>
-    </ul>
-</body>
-</html>
- -->
+
+

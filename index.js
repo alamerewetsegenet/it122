@@ -35,7 +35,7 @@ app.set('view options', { layout: './layouts/main.hbs'});
  app.get('/detail', (req,res,next) => {
     Car.findOne({ make:req.query.make }).lean()
          .then((car) => {
-             res.render('details', {result: car} );
+             res.render('details', {result: car, make:req.query.make} );
          })
          .catch(err => next(err));
  });
@@ -48,7 +48,6 @@ app.get('/api/cars', (req,res) => {
       .then((cars) => {
         res.json(cars);})
       .catch(err =>  {
-        res.status(500).send('Database Error occurred');
       })
 });
 
@@ -59,7 +58,6 @@ app.get('/api/cars/:make', (req,res) => {
            res.json(cars);
         })
         .catch(err => {
-            res.status(500).send('Database Error occurred');I
         });
 });
 
@@ -71,7 +69,7 @@ app.get('/api/delete/:make', (req,res, next) => {
     });
 });
 
-app.post('/api/add/', (req,res, next) => {
+app.post('/api/add/:make/:model/:year/:color/:price', (req,res, next) => {
     if (!req.body.make) { 
         let car = new Car(req.body);
         car.save((err,newCar) => {
@@ -79,13 +77,21 @@ app.post('/api/add/', (req,res, next) => {
             res.json({updated: 0, make: newCar.make});
         });
     } else { 
-        Car.updateOne({ make: req.body.make}, {model:req.body.model, year: req.body.year, color: req.body.color, price: req.body.price, pubdate: req.body.pubdate }, (err, result) => {
+        Car.updateOne({ make:req.body.make}, {model:req.body.model, year:req.body.year, color:req.body.color, price:req.body.price, pubdate:req.body.pubdate }, (err, result) => {
             if (err) return next(err);
-            res.json({updated: result.nModified, make: req.body.make});
+            res.json({updated: result.nModified, make:req.body.make});
         });
     }
 });
 
+app.get('/api/add/:make/:model/:year/:color/:price', (req,res, next) => {
+    let make = req.params.make;
+    Car.update({ make: make}, {make:make, model: req.params.model, year: req.params.year, color: req.params.color, price: req.params.price}, {upsert: true }, (err, result) => {
+        if (err) return next(err);
+        // nModified = 0 for new item, = 1+ for updated item 
+        res.json({updated: result.nModified});
+    });
+});
 
 
 
