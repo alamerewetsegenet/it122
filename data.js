@@ -25,15 +25,22 @@ const cars= [
         model: 'lexus RX', 
         year: '2022',
         color: 'blue', 
-        price: '$47,000', 
+        price: '$50,000', 
     },
     {
         make: 'BMW', 
         model: 'BMW X1', 
         year: '2023',
         color: 'blue', 
-        price: '$39,000', 
+        price: '$49,000', 
     },
+    {
+        make: 'Subaru',
+        model: 'Impraza',
+        year: '2017',
+        color: 'black',
+        price: '$27000',
+    }
 ];
 
 function getAll() {

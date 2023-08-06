@@ -1,19 +1,36 @@
- 
-<!DOCTYPE html>
 <html>
-<head>
-    <title>Home</title>
-    <h1>Cars Models</h1>
-</head>
-<body>
-    <ul>
-        <%data.forEach(item => { %>
-            <li>
-                <a href="/detail?model=<%= item.model %>"><%= item.model %></a>
-            </li>
-        <% }); %>
-    </ul>
-</body>
-</html> 
-
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>React App Demo</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+    <h2></h2>
+    <div id="root"></div>
+    <script type="text/babel">
+    
+    let cars = <%- items %>;
+    console.log(cars)
+    
+    const Cars = (props) => {
+        console.log(props)
+        
+      // props.data is an array
+        const listItems = props.cars.map(item => 
+        <li key={item._id}>{item.make}</li>
+      );
+      return <ul>{listItems}</ul>;
+    };
+    
+    ReactDOM.render(
+        <Cars cars={cars}/>, 
+        document.getElementById('root'));
+    </script>
+    </body>
+    </html>
+    
 
