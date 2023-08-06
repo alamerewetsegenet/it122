@@ -12,33 +12,33 @@ import { Car }  from "./models/Car.js";
 app.set('view engine', 'ejs');
 app.set('view options', { layout: './layouts/main.hbs'});
 
-// app.get('/', (req, res) => {
-//     const data = getAll();
-//     res.render('home', {data});
-// });
+app.get('/', (req, res) => {
+    const data = getAll();
+    res.render('home', {data});
+});
 
-// app.get('/detail', (req, res) => {
-//     const model = req.query.model;
-//     const item = getItem(model);
-//     res.render('detail', {item});
-// });
+app.get('/detail', (req, res) => {
+    const model = req.query.model;
+    const item = getItem(model);
+    res.render('detail', {item});
+});
 
- app.get('/', (req,res) => {
-     console.log(req.query);
-     Car.find({}).lean()
-         .then((cars) => {
-             res.render('home', { items: JSON.stringify(cars)});
-         })
-         .catch(err => next(err));
- });
+//  app.get('/', (req,res) => {
+//      console.log(req.query);
+//      Car.find({}).lean()
+//          .then((cars) => {
+//              res.render('home', { items: JSON.stringify(cars)});
+//          })
+//          .catch(err => next(err));
+//  });
 
- app.get('/detail', (req,res,next) => {
-    Car.findOne({ make:req.query.make }).lean()
-         .then((car) => {
-             res.render('details', {result: car, make:req.query.make} );
-         })
-         .catch(err => next(err));
- });
+//  app.get('/detail', (req,res,next) => {
+//     Car.findOne({ make:req.query.make }).lean()
+//          .then((car) => {
+//              res.render('details', {result: car, make:req.query.make} );
+//          })
+//          .catch(err => next(err));
+//  });
 
 //API
 
