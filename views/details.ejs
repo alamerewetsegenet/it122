@@ -1,0 +1,19 @@
+<html>
+    <body>
+        <a href="/">Home</a>
+<% if (result) { %>
+    <h2><%= make %> details</h2>
+    <li>Model: <%= result.model %></li>
+    <li>Year: <%= result.yearBuild %></li>
+    <li>Color: <%= result.color %></li>
+    <li>Price: <%= result.price %></li>
+
+    <p>
+    <a href="/delete?make=<% result.make %>"></a>
+    </p>
+<% } else { %>
+        <h2><%= make %> not found</h2>
+<% } %>
+
+    </body>
+</html>

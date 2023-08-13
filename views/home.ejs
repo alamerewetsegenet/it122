@@ -9,26 +9,42 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     </head>
     <body>
-    <h2></h2>
+    <h2>Car Inventory</h2>
     <div id="root"></div>
+    <style>
+      body {
+    background: rgb(168, 193, 215);
+    margin-left: 15px;
+
+}
+    </style>
     <script type="text/babel">
     
     let cars = <%- items %>;
     console.log(cars)
+
+    const showDetail = (event) => {
+        // <a href={"/detail?title="+item.title}>
+        console.log(event.target)
+        console.log(event.target.innerText)
+        console.log(event.target.id)
+        window.location.href = "/detail?make=" + event.target.innerText;
+    }
     
     const Cars = (props) => {
         console.log(props)
-        
       // props.data is an array
-        const listItems = props.cars.map(item => 
-        <li key={item._id}>{item.make}</li>
-      );
+        const listItems = props.data.map(item => 
+        <li key={item._id} id={item._id} onClick={props.clickHandler}>
+            {item.make}
+        </li>);
       return <ul>{listItems}</ul>;
     };
     
     ReactDOM.render(
-        <Cars cars={cars}/>, 
-        document.getElementById('root'));
+        <div><Cars data={cars} clickHandler={showDetail}/></div>, 
+        document.getElementById('root')
+        );
     </script>
     </body>
     </html>

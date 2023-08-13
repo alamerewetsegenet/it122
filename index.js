@@ -1,24 +1,26 @@
+'use strict'
 import express from 'express';
+import { Car }  from "./models/Car.js";
 const app = express();
 import { getAll, getItem } from "./data.js";
 
+app.set("port", process.env.PORT || 3000);
+app.use(express.static('./public')); // allows direct navigation to static files
+app.use(express.urlencoded({ extended:true})); //Parse URL-encoded bodies
+app.use(express.json()); //Used to parse JSON bodies
 //API
 import cors from 'cors';
 app.use('/api', cors()); // set Access-Control-Allow-Origin header for api route
 
-import { Car }  from "./models/Car.js";
 //end
 
 app.set('view engine', 'ejs');
-app.set('view options', { layout: './layouts/main.hbs'});
 
  app.get('/', (req,res) => {
-     console.log(req.query);
      Car.find({}).lean()
          .then((cars) => {
-             res.render('home', { items: JSON.stringify(cars)});
-         })
-         .catch(err => next(err));
+             res.render('home', {items: JSON.stringify(cars)});
+         });
  });
 
  app.get('/detail', (req,res,next) => {
@@ -28,10 +30,21 @@ app.set('view options', { layout: './layouts/main.hbs'});
          })
          .catch(err => next(err));
  });
+ app.get('/about', (req,res) => {
+    res.type('text/html');
+    res.render('about');
+});
 
 //API
 
 //get all
+app.get('/api/cars/:make', (req, res, next) => {
+    let make = req.params.make;
+    Car.findOne({make: make}, (err, result) => {
+        if (err || !result) return next(err);
+        res.json( result );    
+    });
+});
 app.get('/api/cars', (req,res) => {
     Car.find({}).lean()
       .then((cars) => {
@@ -75,7 +88,7 @@ app.post('/api/add/:make/:model/:year/:color/:price', (req,res, next) => {
 
 app.get('/api/add/:make/:model/:year/:color/:price', (req,res, next) => {
     let make = req.params.make;
-    Car.update({ make: make}, {make:make, model: req.params.model, year: req.params.year, color: req.params.color, price: req.params.price}, {upsert: true }, (err, result) => {
+    Car.updateOne({ make: make}, {make:make, model: req.params.model, year: req.params.year, color: req.params.color, price: req.params.price}, {upsert: true }, (err, result) => {
         if (err) return next(err);
         // nModified = 0 for new item, = 1+ for updated item 
         res.json({updated: result.nModified});
@@ -84,4 +97,12 @@ app.get('/api/add/:make/:model/:year/:color/:price', (req,res, next) => {
 
 
 
-app.listen(3000, () => console.log('Listening on port 3000'));
+app.use((req,res) => {
+    res.type('text/plain'); 
+    res.status(404);
+    res.send('404 - Not found');
+});
+
+app.listen(app.get('port'), () => {
+    console.log('Express started');    
+});
