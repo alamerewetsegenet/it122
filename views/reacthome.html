@@ -1,103 +1,153 @@
-<!DOCTYPE html>
-<html>
+<!-- <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>React </title>
-  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-  <!-- Don't use this in production: -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>React App Demo</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script> 
+<!- Don't use this in production: -->
+<!-- <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-  <h2>Cars Inventory</h2>
-  <div id="root"></div>
-  <script type="text/babel">
-    const divStyle = {
-      color: 'blue',
-      backgroundColor: 'yellow',
-    };
 
-    const cars = [
-      {"make": "Buick", "model": "Encore GX", "year": "2023", "color": "blue", "price": "$29290"},
-      {"make": "Tesela", "model": "S P90D", "year": "2015", "color": "white", "price": "$37000"},
-      {"make": "Jeep", "model": "Wrangler", "year": "2023", "color": "blue", "price": "$86290"},
-      {"make": "lexus", "model": "lexus RX", "year": "2023", "color": "black", "price": "$29290"},
+<h2></h2>
+<div id="root"></div>
+<script type="text/babel">
+      const divStyle = { color: 'blue', backgroundColor: 'yellow' };
 
-  ]
-    const Users = (props) => {
-      const listItems = props.items.map((item) => (
-        <li key={item.make} onClick={() => props.clickHandler(item)}>
-          {item.make}
-        </li>
-      ));
-      return <ul>{listItems}</ul>;
-    }
+// return a list of cars
+const Car = (props) => {
+  // props.data is an array
+  const listItems = props.data.map((item) => (
+    <li key={item._id} id={item._id} onClick={props.clickHandler}>
+      {item.make}
+    </li>
+  ));
+  return <ul>{listItems}</ul>;
+};
 
-    const Greeting = (props) => {
-      if (props.user) {
-        return <h1> Hello, {props.user}!</h1>;
-      }
-      return <h1 style={divStyle}>Hello, Stranger.</h1>;
-    }
-
-    const Detail = (props) => {
-      return (
-        <div>
-          <h3>Cars Details</h3>
-          {props.item && (
-              
-        <form>
-        Make: <input type="text" name="make" value={props.item.make || ""} onChange={props.handleChange} /><br />
+const ItemDetail = (props) => {
+  return <div>
+      <hr />
+      <h3>Car Details</h3>
+      <form>
+        Make:  <input type="text" name="make" value={props.item.make || ""} onChange={props.handleChange} /><br />
         Model: <input type="text" name="model" value={props.item.model || ""} onChange={props.handleChange} /><br />
-        Year: <input type="text" name="year" value={props.item.year || ""} onChange={props.handleChange} /><br />
+        Year:  <input type="text" name="year" value={props.item.year || ""} onChange={props.handleChange} /><br />
         Color: <input type="text" name="color" value={props.item.color || ""} onChange={props.handleChange} /><br />
         Price: <input type="text" name="price" value={props.item.price || ""} onChange={props.handleChange} /><br />
-        
-        <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
-
       </form>
-            
-          )}
-        </div>
-      )
+      <button name="save" onClick={props.saveItem}>Save</button>&nbsp;
+      <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
+      <button name="delete" onClick={props.deleteItem}>Delete</button>&nbsp;
+    </div>
+  
+}
+
+const CarApp = (props) => {
+  const [items, setItems] = React.useState([]);
+  const [currentItem, setCurrentItem] = React.useState({});
+
+  // load data after component has rendered
+  React.useEffect(() => {
+            const fetchData = async () => {
+                fetch("/api/cars").then(res => res.json())
+                .then((json) => {
+                    setItems(json);
+                })
+            }
+            fetchData()
+        }, []);
+
+  // list click event handler
+  const selectItem = (event) => {
+    const found = items.find((item) => {
+      return item._id === event.target.id;
+
+    });
+
+    setCurrentItem(found);
+  };
+
+  const clearForm = () => {
+    setCurrentItem({});
+  }
+
+
+  const saveItem = () => {
+            if (!currentItem.make) {
+              return;
+            }
+            fetch("/api/add/", {
+              method: "POST",
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(currentItem)
+            })
+            .then(res => res.json())
+            .then((data) => {
+                // if item has no _id, it wasn't previously saved in DB
+                if (!currentItem._id) {
+                    currentItem._id = data._id;
+                    setCurrentItem(currentItem);
+                    // update items list
+                    let newItems = [...items];
+                    newItems.push(currentItem);
+                    setItems(newItems);
+                }
+            })
+        }
+
+        const deleteItem = () => {
+            let id = currentItem._id;
+            // delete item from DB
+            fetch(`/api/delete/${id}`)
+            .then(res => res.json())
+            .then((data) => {
+                // remove item from UI list
+                  const newItems = items.filter((item) => {
+                    return item._id !== id;
+                  });
+              setItems(newItems);
+              // clear form
+              setCurrentItem({})
+            });
+        }
+
+  // update list state
+  const handleChange = (event) => {
+    let newItem = { ...currentItem };
+    newItem[event.target.name] = event.target.value;
+    // update currentItem state
+    setCurrentItem(newItem);
+    // update list state
+    items.find((item, index) => {
+            if (item._id == newItem._id) {
+                items[index] = newItem;
+                setItems(items);
+            }
+          })
+        }
+
+        return (
+            <div> <h2>Cars Inventory</h2>
+                <Car data={items} clickHandler={selectItem} />
+                <ItemDetail
+                  item={currentItem}
+                  handleChange={handleChange}
+                  clearForm={clearForm}
+                  saveItem={saveItem}
+                  deleteItem={deleteItem}
+                />
+            </div>
+        );
+
     }
+    
 
-    const MyApp = () => {
-      const [items, setItems] = React.useState(cars);
-      const [selectedItem, setSelectedItem] = React.useState();
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container);
+root.render( <CarApp />);
 
-
-
-      const itemClicked = (e) => {
-        let found = cars.find((item) => { return item.make == e.target.innerText});
-        setSelectedItem(found);
-      }
-
-      const itemChanged = (e) => {
-        let field = e.target.make;
-        let newItem = { ...selectedItem };
-        nowItem[field] = e.target.value;
-
-        let newItems = items.filter(item => item.make != newItem.make)
-        console.log(newItems)
-        setSelectedItem(newItem);
-
-        
-      }
-
-      return (
-        <div>
-          <h2>Cars Make!</h2>
-          <Users items={items} clickHandler={itemClicked} />
-          <hr/>
-          <Detail item={selectedItem} changeHandler={itemCanged}/>
-        </div>
-      )
-    }
-
-    const container = document.getElementById('root');
-    const root = ReactDOM.createRoot(container);
-    root.render(<MyApp />);
-  </script>
+</script>
 </body>
-</html>
+</html>   -->

@@ -18,7 +18,7 @@ mongoose.connection.on('open', () => {
 const carsSchema = new Schema({
  make: { type: String, required: true },
  model: String,
- year: Date,
+ year: String,
  color: String,
  price: Number
  

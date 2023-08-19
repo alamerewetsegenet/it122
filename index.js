@@ -39,13 +39,6 @@ app.set('view engine', 'ejs');
 //API
 
 //get all
-app.get('/api/cars/:make', (req, res, next) => {
-    let make = req.params.make;
-    Car.findOne({make: make}, (err, result) => {
-        if (err || !result) return next(err);
-        res.json( result );    
-    });
-});
 app.get('/api/cars', (req,res) => {
     Car.find({}).lean()
       .then((cars) => {
@@ -55,13 +48,13 @@ app.get('/api/cars', (req,res) => {
 });
 
 //get one 
-app.get('/api/cars/:make', (req,res) => {
-    Car.findOne({ make:req.params.make }).lean()
-        .then((cars) => {
-           res.json(cars);
-        })
-        .catch(err => {
-        });
+app.get('/api/cars/:make', async (req,res) => {
+    try {
+        const cars = await Car.findOne({ make:req.params.make }).lean();
+        res.status(200).json(cars);
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
 // delete 
@@ -72,18 +65,27 @@ app.get('/api/delete/:make', (req,res, next) => {
     });
 });
 
-app.post('/api/add/:make/:model/:year/:color/:price', (req,res, next) => {
-    if (!req.body.make) { 
+app.post('/api/add', async (req,res, next) => {
+    if (!req.body._id) { 
         let car = new Car(req.body);
-        car.save((err,newCar) => {
-            if (err) return next(err);
+        try {
+            const newCar = await car.save();
             res.json({updated: 0, make: newCar.make});
-        });
+        } catch (err) {
+            res.json({err});
+        }
     } else { 
-        Car.updateOne({ make:req.body.make}, {model:req.body.model, year:req.body.year, color:req.body.color, price:req.body.price, pubdate:req.body.pubdate }, (err, result) => {
-            if (err) return next(err);
-            res.json({updated: result.nModified, make:req.body.make});
-        });
+        try {
+            const result = await Car.updateOne(
+                { _id:req.body._id}, 
+                {$set: req.body},
+                {returnDocument: 'after'}
+            );
+            console.log('updated succesfuly');
+            res.json({updated: req.body, make:req.body.make});
+        } catch (err) {
+            res.json({err});
+        }
     }
 });
 

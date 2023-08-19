@@ -4,12 +4,12 @@
 <% if (result) { %>
     <h2><%= make %> details</h2>
     <li>Model: <%= result.model %></li>
-    <li>Year: <%= result.yearBuild %></li>
+    <li>Year: <%= result.year%></li>
     <li>Color: <%= result.color %></li>
     <li>Price: <%= result.price %></li>
 
     <p>
-    <a href="/delete?make=<% result.make %>"></a>
+    <a href="/delete?make=<% result.make %>">Delete</a>
     </p>
 <% } else { %>
         <h2><%= make %> not found</h2>
